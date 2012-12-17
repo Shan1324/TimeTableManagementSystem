@@ -1,0 +1,106 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Home.master.cs" Inherits="Student" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <style type="text/css">
+        .auto-style1 {
+            width: 100%;
+        }
+        .auto-style2 {
+            height: 276px;
+        }
+        .MasterPage {
+            background-color: purple;
+            color: white;            
+        }
+        .Header {
+            height: 147px;
+            background-color: purple;
+        }
+        .Footer {
+            height: 79px;
+        }
+        .ContentHolderLeft {
+            width: 159px;
+            height:100%;
+            background-color:purple;
+
+        }
+        .auto-style3 {
+            color: #FFFFFF;
+            font-size: x-large;
+        }
+        .auto-style4 {
+            height: 147px;
+            background-color: purple;
+            text-align: center;
+        }
+        .auto-style5 {
+            width: 29px;
+        }
+        .Footer {
+            height: 79px;
+            font-size: xx-small;
+            background-color: purple;
+        }
+    </style>
+</head>
+<body >
+    <form id="form1" runat="server">
+    <div class ="MasterPage">
+    <table class="auto-style1">
+        <tr>
+            <td class="auto-style4"><strong><span class="auto-style3">TIME TABLE MANAGEMENT SYSTEM</span></strong></td>
+        </tr>
+        <tr>
+            <td class="auto-style2">
+                <table class="auto-style1">
+                    <tr>
+                        <td class="ContentHolderLeft">
+                            <table class="auto-style1">
+                                <tr>
+                                    <td class="auto-style5">&nbsp;</td>
+                                    <td>Home</td>
+                                </tr>
+                                <tr>
+                                    <td class="auto-style5">&nbsp;</td>
+                                    <td>
+                                        <asp:HyperLink ID="HyperLink2" runat="server" NavigateUrl="~/UserLogin.aspx" ForeColor="White">User&#39;s Login</asp:HyperLink>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="auto-style5">&nbsp;</td>
+                                    <td>
+                                        &nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td class="auto-style5">&nbsp;</td>
+                                    <td>Help</td>
+                                </tr>
+                                <tr>
+                                    <td class="auto-style5">&nbsp;</td>
+                                    <td>About Us</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="ContentHolderRight">
+                            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                            </asp:ContentPlaceHolder>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td class="Footer">All Rights Reserver 2012</td>
+        </tr>
+    </table>
+        </div>
+    </form>
+</body>
+</html>
