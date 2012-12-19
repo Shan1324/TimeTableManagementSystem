@@ -89,4 +89,9 @@ public class DBCon
             throw ex;
         }
     }
+    public MySqlCommand MakeSqlCommand(string SqlCommand)
+    {
+        MySqlCommand Command = new MySqlCommand(SqlCommand, myCon);
+        return Command;
+    }
 }

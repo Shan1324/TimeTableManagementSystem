@@ -27,7 +27,7 @@
                 <br />
             </td>
             <td rowspan="5">
-                <asp:GridView ID="grdCourses" runat="server" AllowSorting="True" AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333" GridLines="None" OnSelectedIndexChanged="grdCourses_SelectedIndexChanged">
+                <asp:GridView ID="grdCourses" runat="server" AllowSorting="True" AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333" GridLines="None" AllowPaging="True" OnSelectedIndexChanged="grdCourses_SelectedIndexChanged" OnPageIndexChanging="grdCourses_PageIndexChanging" PageSize="2">
                     <AlternatingRowStyle BackColor="White" />
                     <Columns>
                         <asp:TemplateField>
@@ -60,7 +60,7 @@
                     <SortedDescendingHeaderStyle BackColor="#820000" />
                 </asp:GridView>
                 <br />
-                <asp:Button ID="btnAddCourses" runat="server" Text="Add selected to profile" />
+                <asp:Button ID="btnAddCourses" runat="server" OnClick="btnAddCourses_Click" Text="Add selected to profile" />
             </td>
         </tr>
         <tr>

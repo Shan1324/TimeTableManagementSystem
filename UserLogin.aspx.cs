@@ -21,6 +21,7 @@ public partial class Home : System.Web.UI.Page
         
         if (typeReader.Read())
         {
+            Session["UserId"] = txtID.Text;
             string userType = typeReader.GetString("Type");
             dbConnection.ConClose();
             switch (userType)
