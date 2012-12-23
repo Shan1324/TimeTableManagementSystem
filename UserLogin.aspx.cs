@@ -4,7 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using MySql.Data.MySqlClient;
+using System.Data.Sql;
+using System.Data.SqlClient;
 
 public partial class Home : System.Web.UI.Page
 {
@@ -14,15 +15,15 @@ public partial class Home : System.Web.UI.Page
     }     
     protected void btnLogin_Click(object sender, EventArgs e)
     {
-        string userLoginQuery = "select Type from timetablemanagementsystem.tblUsers where ID = '" + txtID.Text + "' and Password = '" + txtPWD.Text + "'";
+        string userLoginQuery = "select Type from tblUsers where ID = '" + txtID.Text + "' and Password = '" + txtPWD.Text + "'";
         DBCon dbConnection = new DBCon();
         dbConnection.ConOpen();
-        MySqlDataReader typeReader = dbConnection.ExecuteReader(userLoginQuery);
+        SqlDataReader typeReader = dbConnection.ExecuteReader(userLoginQuery);
         
         if (typeReader.Read())
         {
             Session["UserId"] = txtID.Text;
-            string userType = typeReader.GetString("Type");
+            string userType = typeReader.GetString(0);
             dbConnection.ConClose();
             switch (userType)
             {

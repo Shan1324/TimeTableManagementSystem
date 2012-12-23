@@ -20,5 +20,6 @@ public partial class Student_StudentSelectedCourseDetails : System.Web.UI.UserCo
         txtSelectedTutor.Visible =
         Label1.Visible = Label2.Visible = Label3.Visible = Label4.Visible =
             (txtSelectedComCod.Text != "");
+        Label5.Visible = (txtSelectedComCod.Text == "");
     }
 }

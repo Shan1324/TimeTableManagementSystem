@@ -2,38 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using MySql.Data.MySqlClient;
-
+using System.Data.SqlClient;
 /// <summary>
 /// Required operations to be done on DB
 /// </summary>
 public class DBCon
 {
     string strCon;
-    MySqlConnection myCon;
-	public DBCon(string DB = "timetablemanagementsystem", string server = "localhost",string UID = "root", string PWD = "root123" )
+    SqlConnection myCon;
+	public DBCon(string DB = "timetablemanagementsystem", string server = "localhost",string UID = "sa", string PWD = "root123" )
 	{
 		//
 		// TODO: Add constructor logic here
 		//
-        strCon = string.Format("Database=" + DB + ";Server=" + server + ";UID=" + UID + ";PWD=" + PWD + ";");
-        myCon = new MySqlConnection(strCon);
+       // strCon = string.Format("Server=.\\SQLExpress;AttachDbFilename=|DataDirectory|" + DB + ".mdf;Database=" + DB +";Trusted_Connection=Yes;");
+        strCon = string.Format("Server=.\\SQLExpress;Database=" + DB + ";Trusted_Connection=Yes;");
+        myCon = new SqlConnection(strCon);
 	}
     public void InitiateCon()
     {
-        myCon = new MySqlConnection(strCon);
+        myCon = new SqlConnection(strCon);
         try
         {
             myCon.Open();           
         }
-        catch (MySqlException ex)
+        catch (SqlException ex)
         {
             throw ex;
         }
     }
     public Int32 ExecuteNonQuery(string SqlCommand)
     {
-        MySqlCommand sqlCommand = new MySqlCommand(SqlCommand, myCon);
+        SqlCommand sqlCommand = new SqlCommand(SqlCommand, myCon);
         try
         {
             sqlCommand.Connection.Open();
@@ -42,7 +42,7 @@ public class DBCon
             return retCode;
             
         }
-        catch (MySqlException ex)
+        catch (SqlException ex)
         {
             sqlCommand.Connection.Close();
             throw ex;
@@ -50,7 +50,7 @@ public class DBCon
     }
     public int ExecuteScalarInt(string SqlCommand)
     {
-        MySqlCommand sqlCommand = new MySqlCommand(SqlCommand, myCon);
+        SqlCommand sqlCommand = new SqlCommand(SqlCommand, myCon);
         try
         {
             sqlCommand.Connection.Open();
@@ -61,7 +61,7 @@ public class DBCon
             
 
         }
-        catch (MySqlException ex)
+        catch (SqlException ex)
         {
             sqlCommand.Connection.Close();
             throw ex;
@@ -75,23 +75,23 @@ public class DBCon
     {
         myCon.Close();
     }
-    public MySqlDataReader ExecuteReader(string SqlCommand)
+    public SqlDataReader ExecuteReader(string SqlCommand)
     {
-        MySqlCommand sqlCommand = new MySqlCommand(SqlCommand, myCon);
+        SqlCommand sqlCommand = new SqlCommand(SqlCommand, myCon);
         try
         {            
-            MySqlDataReader myReader = sqlCommand.ExecuteReader();            
+            SqlDataReader myReader = sqlCommand.ExecuteReader();            
             return myReader;
         }
-        catch (MySqlException ex)
+        catch (SqlException ex)
         {
             sqlCommand.Connection.Close();
             throw ex;
         }
     }
-    public MySqlCommand MakeSqlCommand(string SqlCommand)
+    public SqlCommand MakeSqlCommand(string SqlCommand)
     {
-        MySqlCommand Command = new MySqlCommand(SqlCommand, myCon);
+        SqlCommand Command = new SqlCommand(SqlCommand, myCon);
         return Command;
     }
 }

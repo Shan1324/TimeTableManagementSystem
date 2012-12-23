@@ -4,15 +4,15 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 public partial class Teacher_TeacherHome : System.Web.UI.Page
 {
     string Current_User_ID;
     String queryString;
     DBCon myCon = new DBCon();
-    MySqlCommand queryCommand;
-    MySqlDataAdapter sqlDA;
+    SqlCommand queryCommand;
+    SqlDataAdapter sqlDA;
     protected void Page_Load(object sender, EventArgs e)
     {
         //Session["UserId"] = "teach1";
@@ -27,8 +27,8 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
             {             
                 //populate drop down list
                 myCon.ConOpen();
-                queryString = "Select distinct Department from timetablemanagementsystem.tblDepartment";
-                MySqlDataReader ListDepartment = myCon.ExecuteReader(queryString);
+                queryString = "Select distinct Department from tblDepartment";
+                SqlDataReader ListDepartment = myCon.ExecuteReader(queryString);
                 ddlDepartments.DataSource = ListDepartment;
                 ddlDepartments.DataTextField = "Department";
                 ddlDepartments.DataBind();
@@ -45,9 +45,9 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
     {
         ////populate courses not added to profile
         //myCon.ConOpen();
-        //queryString = "Select ComCod, CourseNo, CourseTitle from timetablemanagementsystem.tblcourses where ComCod not in ( select ComCod from timetablemanagementsystem.tblcourseteachermap where TeacherID = '" + Current_User_ID + "')";
+        //queryString = "Select ComCod, CourseNo, CourseTitle from tblcourses where ComCod not in ( select ComCod from tblcourseteachermap where TeacherID = '" + Current_User_ID + "')";
         //queryCommand = myCon.MakeSqlCommand(queryString);
-        //sqlDA = new MySqlDataAdapter(queryCommand);
+        //sqlDA = new SqlDataAdapter(queryCommand);
         //System.Data.DataSet myDS = new System.Data.DataSet();
 
         //sqlDA.Fill(myDS);
@@ -60,12 +60,12 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
         //myDS.Dispose();
         //myCon.ConClose();
         String queryString;
-        queryString = "Select ComCod, CourseNo, CourseTitle from timetablemanagementsystem.tblcourses where ";
+        queryString = "Select ComCod, CourseNo, CourseTitle from tblcourses where ";
         DBCon myCon = new DBCon();
         myCon.ConOpen();
         if (ddlDepartments.SelectedItem.Text != "All Departments")
         {
-            queryString = queryString + " ComCod in (Select ComCod from timetablemanagementsystem.tblDepartment where Department = '" + ddlDepartments.SelectedItem.Text + "'";
+            queryString = queryString + " ComCod in (Select ComCod from tblDepartment where Department = '" + ddlDepartments.SelectedItem.Text + "'";
             if (ddlSem.SelectedItem.Text != "All Semesters")
             {
                 queryString += " and Semester = '" + ddlSem.SelectedItem.Text + "'";
@@ -76,7 +76,7 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
         {
             if (ddlSem.SelectedItem.Text != "All Semesters")
             {
-                queryString = queryString + " ComCod in (Select ComCod from timetablemanagementsystem.tblDepartment where Semester = '" + ddlSem.SelectedItem.Text + "') and ";
+                queryString = queryString + " ComCod in (Select ComCod from tblDepartment where Semester = '" + ddlSem.SelectedItem.Text + "') and ";
             }
         }
 
@@ -85,10 +85,10 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
             queryString +=  ddlSearchItem.SelectedItem.Value + " like '%" + txtSearchString.Text + "%' and ";
         }
 
-        queryString += " ComCod not in ( select ComCod from timetablemanagementsystem.tblcourseteachermap where TeacherID = '" + Current_User_ID + "')";
+        queryString += " ComCod not in ( select ComCod from tblcourseteachermap where TeacherID = '" + Current_User_ID + "')";
 
         queryCommand = myCon.MakeSqlCommand(queryString);
-        sqlDA = new MySqlDataAdapter(queryCommand);
+        sqlDA = new SqlDataAdapter(queryCommand);
         System.Data.DataSet myDS = new System.Data.DataSet();
         sqlDA.Fill(myDS);
         grdCourses.DataSource = myDS;
@@ -101,9 +101,9 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
     private void Bind_grdAddedCourses()
     {
         //populate courses added to profile
-        queryString = "Select A.ComCod as ComCod, A.CourseNo as CourseNo, A.CourseTitle as CourseTitle, B.Section as Section from timetablemanagementsystem.tblcourses as A,timetablemanagementsystem.tblcourseteachermap as B where A.ComCod in ( select ComCod from timetablemanagementsystem.tblcourseteachermap where TeacherID = '" + Current_User_ID + "') and A.ComCod = B.ComCod";
+        queryString = "Select A.ComCod as ComCod, A.CourseNo as CourseNo, A.CourseTitle as CourseTitle, B.Section as Section from tblcourses as A,tblcourseteachermap as B where A.ComCod in ( select ComCod from tblcourseteachermap where TeacherID = '" + Current_User_ID + "') and A.ComCod = B.ComCod";
         queryCommand = myCon.MakeSqlCommand(queryString);
-        sqlDA = new MySqlDataAdapter(queryCommand);
+        sqlDA = new SqlDataAdapter(queryCommand);
         System.Data.DataSet myDS = new System.Data.DataSet();
 
         sqlDA.Fill(myDS);
@@ -142,7 +142,7 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
             CheckBox chkSelectedCourse = (CheckBox)grdSelectedRow.FindControl("chkItemSelect");
             if (chkSelectedCourse.Checked)
             {
-                string insertQuery = "Insert into timetablemanagementsystem.tblcourseteachermap(TeacherID,ComCod,Section) values ('" + Current_User_ID + "','" + selectedComCod + "','" + selectedSection + "')";
+                string insertQuery = "Insert into tblcourseteachermap(TeacherID,ComCod,Section) values ('" + Current_User_ID + "','" + selectedComCod + "','" + selectedSection + "')";
                 if (myCon.ExecuteNonQuery(insertQuery) <= 0)
                 {
                     Response.Write("<script LANGUAGE='JavaScript' >alert('DB Updation failed, changes might be lost');</script>");
@@ -180,7 +180,7 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
             CheckBox chkSelectedCourse = (CheckBox)grdSelectedRow.FindControl("chkItemSelectRemove");
             if (chkSelectedCourse.Checked)
             {
-                string insertQuery = "delete from timetablemanagementsystem.tblcourseteachermap where TeacherID ='" + Current_User_ID + "' and ComCod = '" + selectedComCod + "' and Section = '" + selectedSection + "'";
+                string insertQuery = "delete from tblcourseteachermap where TeacherID ='" + Current_User_ID + "' and ComCod = '" + selectedComCod + "' and Section = '" + selectedSection + "'";
                 if (myCon.ExecuteNonQuery(insertQuery) <= 0)
                 {
                     Response.Write("<script LANGUAGE='JavaScript' >alert('DB Updation failed, changes might be lost');</script>");

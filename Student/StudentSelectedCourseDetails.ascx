@@ -41,7 +41,8 @@
                                 </tr>
                                 <tr>
                                     <td class="auto-style7">
-                                        &nbsp;</td>
+                                        <asp:Label ID="Label5" runat="server" Font-Italic="True" Text="No Course Added For This Session"></asp:Label>
+                                    </td>
                                 </tr>
                             </table>
                         </td>
