@@ -12,7 +12,9 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
     String queryString;
     DBCon myCon = new DBCon();
     SqlCommand queryCommand;
+    String ApprovalStatus;
     SqlDataAdapter sqlDA;
+
     protected void Page_Load(object sender, EventArgs e)
     {
         //Session["UserId"] = "teach1";
@@ -36,10 +38,49 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
                 myCon.ConClose();
 
                 Bind_grdAddedCourses();
-                Bind_grdCourses();
+                Bind_grdCourses();               
             }
+            Get_Approval_Status();
         }
       
+    }
+    private void Get_Approval_Status()
+    {
+        string query = "select Status,Message from tblApprovalStatus where ID = '" + Current_User_ID + "'";
+        myCon.ConOpen();
+        SqlDataReader ApprovalStat = myCon.ExecuteReader(query);
+        if(ApprovalStat.Read())
+        {
+
+            lblApprovalStatus.Text = ApprovalStat.GetString(0);
+            if (ApprovalStat.IsDBNull(1))
+            {
+                txtMessageBox.Text = "No Messages from Admin";
+            }
+            else
+            {
+                txtMessageBox.Text = ApprovalStat.GetString(1);
+            }
+        }
+        else
+        {
+            lblApprovalStatus.Text = "No requests made";
+        }
+        myCon.ConClose();
+    }
+    private void Make_Dirty_Approval_Status()
+    {
+        string query = "select Count(*) from tblApprovalStatus where ID = '" + Current_User_ID + "'";
+        if (myCon.ExecuteScalarInt(query) > 0)
+        {
+            query = "update tblApprovalStatus set Status = 'Pending Approval' where ID = '" + Current_User_ID + "'";
+            myCon.ExecuteNonQuery(query);
+        }
+        else
+        {
+            query = "insert into tblApprovalStatus(Status,ID) values ('Pending Approval', '" + Current_User_ID + "')";
+            myCon.ExecuteNonQuery(query);
+        }
     }
     private void Bind_grdCourses()
     {
@@ -151,8 +192,10 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
                
             }
         }
+        Make_Dirty_Approval_Status();
         Bind_grdAddedCourses();
         Bind_grdCourses();
+        Get_Approval_Status();
     }
     protected void grdCourses_PageIndexChanging(object sender, GridViewPageEventArgs e)
     {
@@ -189,13 +232,30 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
                 
             }
         }
+        Make_Dirty_Approval_Status();
         Bind_grdAddedCourses();
         Bind_grdCourses();
+        Get_Approval_Status();
     }
 
     protected void btnSignOut_Click(object sender, EventArgs e)
     {
         Session["UserId"] = null;
         Response.Redirect("~/UserLogin.aspx");
+    }
+    protected void btnSendForApproval_Click(object sender, EventArgs e)
+    {
+        string query = "select Count(*) from tblApprovalStatus where ID = '" + Current_User_ID + "'";
+        if (myCon.ExecuteScalarInt(query) > 0)
+        {
+            query = "update tblApprovalStatus set Status ='Requested Approval' where ID = '" + Current_User_ID + "'";
+            myCon.ExecuteNonQuery(query);
+        }
+        else
+        {
+            query = "insert into tblApprovalStatus(Status,ID) values ('Requested Approval', '" + Current_User_ID + "')";
+            myCon.ExecuteNonQuery(query);
+        }
+        Get_Approval_Status();
     }
 }

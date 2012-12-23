@@ -14,6 +14,18 @@
         .auto-style10 {
             width: 106px;
         }
+        .auto-style11 {
+        }
+        .auto-style12 {
+            width: 114px;
+            height: 23px;
+        }
+        .auto-style13 {
+            height: 23px;
+        }
+        .auto-style14 {
+            width: 109px;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
@@ -130,7 +142,35 @@
         </tr>
         <tr>
             <td colspan="2">
-                &nbsp;</td>
+                <table class="auto-style1">
+                    <tr>
+                        <td colspan="2">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table class="auto-style1">
+                                <tr>
+                                    <td class="auto-style12">Approval Status</td>
+                                    <td class="auto-style13">
+                                        <asp:Label ID="lblApprovalStatus" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="auto-style11" colspan="2">
+                                        <asp:TextBox ID="txtMessageBox" runat="server" Enabled="False" ReadOnly="True" Rows="5" TextMode="MultiLine" Width="224px"></asp:TextBox>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="auto-style14">&nbsp;</td>
+                        <td>
+                            <asp:Button ID="btnSendForApproval" runat="server" OnClick="btnSendForApproval_Click" Text="Send for approval" Width="118px" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
             <td colspan="3" >
                 <asp:GridView ID="grdTeachingCourses" runat="server" AllowSorting="True" AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333" GridLines="None" AllowPaging="True" OnPageIndexChanging="grdTeachingCourses_PageIndexChanging" PageSize="2">
                     <AlternatingRowStyle BackColor="White" />

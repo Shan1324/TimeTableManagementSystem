@@ -10,12 +10,11 @@ public class DBCon
 {
     string strCon;
     SqlConnection myCon;
-	public DBCon(string DB = "timetablemanagementsystem", string server = "localhost",string UID = "sa", string PWD = "root123" )
+    public DBCon(string DB = "timetablemanagementsystem", string server = "localhost", string UID = "sa", string PWD = "root123")
 	{
 		//
 		// TODO: Add constructor logic here
 		//
-       // strCon = string.Format("Server=.\\SQLExpress;AttachDbFilename=|DataDirectory|" + DB + ".mdf;Database=" + DB +";Trusted_Connection=Yes;");
         strCon = string.Format("Server=.\\SQLExpress;Database=" + DB + ";Trusted_Connection=Yes;");
         myCon = new SqlConnection(strCon);
 	}
@@ -54,12 +53,10 @@ public class DBCon
         try
         {
             sqlCommand.Connection.Open();
-            //Int32 retCode = (Int32)sqlCommand.ExecuteScalar();
-            Int64 retCode = (Int64)sqlCommand.ExecuteScalar();
+            int retcode = (int)sqlCommand.ExecuteScalar();
             sqlCommand.Connection.Close();
-            return (int)retCode;
-            
-
+            return retcode;
+           
         }
         catch (SqlException ex)
         {
