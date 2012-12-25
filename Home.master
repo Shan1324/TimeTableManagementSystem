@@ -48,6 +48,9 @@
             font-size: xx-small;
             background-color: purple;
         }
+        .auto-style6 {
+            width: 781px;
+        }
     </style>
 </head>
 <body class ="MasterPage">
@@ -61,7 +64,7 @@
             <td class="auto-style2">
                 <table class="auto-style1">
                     <tr>
-                        <td class="ContentHolderLeft">
+                        <td class="ContentHolderLeft" rowspan="3">
                             <table class="auto-style1">
                                 <tr>
                                     <td class="auto-style5">&nbsp;</td>
@@ -87,12 +90,18 @@
                                     <td>About Us</td>
                                 </tr>
                             </table>
-                        </td>
+                        </td>                      
+                    </tr>
+                    <tr>
                         <td class="ContentHolderRight">
                             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
                                 
                             </asp:ContentPlaceHolder>
                         </td>
+                    </tr>
+                    <tr>
+                        <td class="ContentHolderRight">
+                            &nbsp;</td>
                     </tr>
                 </table>
             </td>

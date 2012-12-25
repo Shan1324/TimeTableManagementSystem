@@ -52,7 +52,7 @@
                 &nbsp;</td>
             <td>
                 <asp:Button ID="btnSignOut" runat="server" OnClick="btnSignOut_Click" Text="Sign Out" Width="94px" />
-            </td>
+                                    </td>
             <td rowspan="2">&nbsp;</td>
         </tr>
         <tr>

@@ -11,4 +11,9 @@ public partial class Student : System.Web.UI.MasterPage
     {
 
     }
+    protected void btnSignOut_Click(object sender, EventArgs e)
+    {
+        Session["UserId"] = null;
+        Response.Redirect("~/UserLogin.aspx");
+    }
 }
