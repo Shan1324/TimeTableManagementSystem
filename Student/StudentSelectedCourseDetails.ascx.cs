@@ -34,7 +34,6 @@ public partial class Student_StudentSelectedCourseDetails : System.Web.UI.UserCo
     }
     public void Set_Visibiltiy()
     {
-        btnRemoveSelectedCourse.Visible =
         txtSelectedComCod.Visible =
         txtSelectedCourseNo.Visible =
         txtSelectedTitle .Visible =
@@ -42,14 +41,6 @@ public partial class Student_StudentSelectedCourseDetails : System.Web.UI.UserCo
         Label1.Visible = Label2.Visible = Label3.Visible = Label4.Visible =
             (txtSelectedComCod.Text != "");
         Label5.Visible = (txtSelectedComCod.Text == "");
-    }
-    protected void btnRemoveSelectedCourse_Click(object sender, EventArgs e)
-    {
-        string query = "delete from tblStudentCourseMap where DaySession = '" + this.ID.ToString() + "' and StudentID = '" + Current_User_ID + "'";
-        int retCode = myCon.ExecuteNonQuery(query);
-        Make_Dirty_Approval_Status();
-        Response.Redirect(Request.RawUrl);
-        //this.Page_Load(sender,e);
     }
     private void Make_Dirty_Approval_Status()
     {

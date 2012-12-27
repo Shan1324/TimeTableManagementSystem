@@ -16,7 +16,7 @@ public partial class Student_StdentHome : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        Session["UserId"] = "stud1";
+        //Session["UserId"] = "stud1";
         if (Session["UserId"] == null)
         {
             Response.Write("<script LANGUAGE='JavaScript' >alert('Session timed out, please re-login');document.location='" + ResolveClientUrl("~/UserLogin.aspx") + "';</script>");
@@ -98,21 +98,58 @@ public partial class Student_StdentHome : System.Web.UI.Page
     }
     protected void btnInsert_Click(object sender, EventArgs e)
     {
-        if (txtComCode.Text != "" && ddlTutor.SelectedValue!= "")
+        bool isValidOperation = true;
+        string insertQuery = "";
+        SqlDataReader listDaySession;
+        if (txtComCode.Text != "" && ddlTutor.SelectedValue != "")
         {
-            string query = "select count(*) from tblStudentCourseMap where StudentID = '" + Current_User_ID + "' and DaySession = '" + ddlDay.SelectedValue.ToString() + ddlHour.SelectedValue.ToString() + "'";
-            if (myCon.ExecuteScalarInt(query) > 0)
+            string DaySession;
+            DBCon myCon2 = new DBCon();
+            string query = "select DaySession from tblCourseTeacherMap where ComCod = '" + ddlCourseTitle.SelectedValue + "' and TeacherID = '" + ddlTutor.SelectedValue + "'";
+            if (ddlOperation.SelectedValue == "Insert")
             {
-                query = "update tblStudentCourseMap set ComCod = '" + txtComCode.Text + "', TeacherID ='" + ddlTutor.SelectedValue.ToString() + "' where StudentID ='" + Current_User_ID + "' and DaySession = '" + ddlDay.SelectedValue.ToString() + ddlHour.SelectedValue.ToString() + "'";
-                myCon.ExecuteNonQuery(query);
+                myCon.ConOpen();
+                listDaySession = myCon.ExecuteReader(query);
+                while (listDaySession.Read() && isValidOperation)
+                {
+                    DaySession = listDaySession.GetString(0);
+                    string checkQuery = "select count(*) from tblStudentCourseMap where DaySession = '" + DaySession + "'";
+                    int Occurence = myCon2.ExecuteScalarInt(checkQuery);
+                    if (Occurence > 0)
+                    {
+                        Response.Write("<script LANGUAGE='JavaScript' >alert('" + DaySession + " has another entry, aborting operation. Please remove entry and try again.');</script>");
+                        isValidOperation = false;
+                        break;
+                    }
+                }
+                myCon.ConClose();
             }
-            else
+
+            myCon.ConOpen();            
+            query = "select DaySession from tblCourseTeacherMap where ComCod = '" + ddlCourseTitle.SelectedValue + "' and TeacherID = '" + ddlTutor.SelectedValue + "'";
+            listDaySession = myCon.ExecuteReader(query);
+            while (listDaySession.Read() && isValidOperation)
             {
-                query = "insert into tblStudentCourseMap(ComCod,TeacherID,StudentID,DaySession) values ('" + txtComCode.Text + "', '" + ddlTutor.SelectedValue.ToString() + "','" + Current_User_ID + "','" + ddlDay.SelectedValue.ToString() + ddlHour.SelectedValue.ToString() + "')";
-                myCon.ExecuteNonQuery(query);
+                DaySession = listDaySession.GetString(0);
+                if (ddlOperation.SelectedValue == "Insert")
+                {
+                    insertQuery = "insert into tblStudentCourseMap(StudentID,ComCod,DaySession,TeacherID) values ('" + Current_User_ID + "','" + txtComCode.Text + "','" + DaySession + "','" + ddlTutor.SelectedValue + "')";
+                }
+                else
+                {
+                    if (ddlOperation.SelectedValue == "Remove")
+                    {                       
+                        insertQuery = "Delete from tblStudentCourseMap where StudentID = '" + Current_User_ID + "' and ComCod = '" + txtComCode.Text + "' and DaySession = '" + DaySession + "' and TeacherID = '" + ddlTutor.SelectedValue + "'";                        
+                    }
+                }
+                myCon2.ExecuteNonQuery(insertQuery);
             }
-            Make_Dirty_Approval_Status();
-            Response.Redirect(Request.RawUrl);
+            myCon.ConClose();
+            if (isValidOperation)
+            {
+                Make_Dirty_Approval_Status();
+                Response.Redirect(Request.RawUrl);
+            }
         }
     }
     private void Get_Approval_Status()

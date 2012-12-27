@@ -83,8 +83,7 @@
     <tr>
         <td class="auto-style10">&nbsp;</td>
         <td>
-            <asp:Button ID="btnRemoveSelectedCourse" runat="server" Text="Remove" OnClick="btnRemoveSelectedCourse_Click" />
-        </td>
+            &nbsp;</td>
     </tr>
 </table>
 

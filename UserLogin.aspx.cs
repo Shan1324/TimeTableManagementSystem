@@ -33,6 +33,9 @@ public partial class Home : System.Web.UI.Page
                 case "STUDENT":
                      Response.Redirect("~/Student/StudentHome.aspx");
                     break;
+                case "ADMIN":
+                    Response.Redirect("~/Admin/AdminHome.aspx");
+                    break;
             }
         }
         else

@@ -39,6 +39,13 @@
         .auto-style19 {
             width: 1256px;
         }
+        .auto-style20 {
+            width: 100px;
+        }
+        .auto-style21 {
+            height: 23px;
+            width: 507px;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
@@ -87,28 +94,14 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="auto-style13">Day&nbsp; </td>
+                        <td class="auto-style13">&nbsp;</td>
                         <td class="auto-style12">
-                            <asp:DropDownList ID="ddlDay" runat="server">
-                                <asp:ListItem Value="Sun">Sunday</asp:ListItem>
-                                <asp:ListItem Value="Mon">Monday</asp:ListItem>
-                                <asp:ListItem Value="Tue">Tuesday</asp:ListItem>
-                                <asp:ListItem Value="Wed">Wednesday</asp:ListItem>
-                                <asp:ListItem Value="Thu">Thursday</asp:ListItem>
-                            </asp:DropDownList>
-                        </td>
-                        <td class="auto-style14">Hour&nbsp; </td>
+                            &nbsp;</td>
+                        <td class="auto-style14">&nbsp;</td>
                         <td class="auto-style15">
-                            <asp:DropDownList ID="ddlHour" runat="server">
-                                <asp:ListItem>1</asp:ListItem>
-                                <asp:ListItem>2</asp:ListItem>
-                                <asp:ListItem>3</asp:ListItem>
-                                <asp:ListItem>4</asp:ListItem>
-                                <asp:ListItem>5</asp:ListItem>
-                                <asp:ListItem>6</asp:ListItem>
-                                <asp:ListItem>7</asp:ListItem>
-                                <asp:ListItem>8</asp:ListItem>
-                                <asp:ListItem>9</asp:ListItem>
+                            <asp:DropDownList ID="ddlOperation" runat="server">
+                                <asp:ListItem>Insert</asp:ListItem>
+                                <asp:ListItem>Remove</asp:ListItem>
                             </asp:DropDownList>
                         </td>
                         <td>
@@ -116,7 +109,7 @@
                                 <tr>
                                     <td class="auto-style17">&nbsp;</td>
                                     <td>
-                                        <asp:Button ID="btnInsert" runat="server" Text="Insert" Width="127px" OnClick="btnInsert_Click" />
+                                        <asp:Button ID="btnInsert" runat="server" Text="Apply" Width="127px" OnClick="btnInsert_Click" />
                                     </td>
                                 </tr>
                             </table>
@@ -132,7 +125,7 @@
             <td colspan="3">
                 <table class="auto-style1" id="TimeTableSchedule" style="overflow: visible; padding: 50px; margin: 5px" border="1">
                     <tr style="text-align:center">
-                        <td>&nbsp;</td>
+                        <td class="auto-style20">&nbsp;</td>
                         <td>1</td>
                         <td>2</td>
                         <td>3</td>
@@ -144,7 +137,7 @@
                         <td>9</td>
                     </tr>
                     <tr>
-                        <td>Sun</td>
+                        <td class="auto-style20">Sun</td>
                         <td>
                             <SelectedCoursePrefix:SelectedCourseControl id="Sun1" runat="server"/></td>
                         <td>
@@ -160,8 +153,7 @@
                             <SelectedCoursePrefix:SelectedCourseControl id="Sun5" runat="server"/>
                         </td>
                         <td>
-                            <SelectedCoursePrefix:SelectedCourseControl id="Sun6" runat="server"/>
-                        </td>
+                            Reserved for lunch break</td>
                         <td>
                             <SelectedCoursePrefix:SelectedCourseControl id="Sun7" runat="server"/>
                         </td>
@@ -173,7 +165,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="auto-style10">Mon</td>
+                        <td class="auto-style21">Mon</td>
                         <td class="auto-style10">
                             <SelectedCoursePrefix:SelectedCourseControl id="Mon1" runat="server"/></td>
                         <td class="auto-style10">
@@ -184,8 +176,8 @@
                             <SelectedCoursePrefix:SelectedCourseControl id="Mon4" runat="server"/></td>
                         <td class="auto-style10">
                             <SelectedCoursePrefix:SelectedCourseControl id="Mon5" runat="server"/></td>
-                        <td class="auto-style10">
-                            <SelectedCoursePrefix:SelectedCourseControl id="Mon6" runat="server"/></td>
+                        <td>
+                            Reserved for lunch break</td>
                         <td class="auto-style10">
                             <SelectedCoursePrefix:SelectedCourseControl id="Mon7" runat="server"/></td>
                         <td class="auto-style10">
@@ -195,7 +187,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="auto-style10">Tue</td>
+                        <td class="auto-style21">Tue</td>
                         <td class="auto-style10">
                             <SelectedCoursePrefix:SelectedCourseControl id="Tue1" runat="server"/></td>
                         <td class="auto-style10">
@@ -208,9 +200,8 @@
                         <td class="auto-style10">
                             <SelectedCoursePrefix:SelectedCourseControl id="Tue5" runat="server"/>
                             </td>
-                        <td class="auto-style10">
-                            <SelectedCoursePrefix:SelectedCourseControl id="Tue6" runat="server"/>
-                            </td>
+                        <td>
+                            Reserved for lunch break</td>
                         <td class="auto-style10">
                             <SelectedCoursePrefix:SelectedCourseControl id="Tue7" runat="server"/>
                             </td>
@@ -222,7 +213,7 @@
                             </td>
                     </tr>
                     <tr>
-                        <td>Wed</td>
+                        <td class="auto-style20">Wed</td>
                         <td>
                             <SelectedCoursePrefix:SelectedCourseControl id="Wed1" runat="server"/>
                             </td>
@@ -239,8 +230,7 @@
                             <SelectedCoursePrefix:SelectedCourseControl id="Wed5" runat="server"/>
                             </td>
                         <td>
-                            <SelectedCoursePrefix:SelectedCourseControl id="Wed6" runat="server"/>
-                            </td>
+                            Reserved for lunch break</td>
                         <td>
                             <SelectedCoursePrefix:SelectedCourseControl id="Wed7" runat="server"/>
                             </td>
@@ -252,7 +242,7 @@
                             </td>
                     </tr>
                     <tr>
-                        <td>Thu</td>
+                        <td class="auto-style20">Thu</td>
                         <td>
                             <SelectedCoursePrefix:SelectedCourseControl id="Thu1" runat="server"/>
                             </td>
@@ -268,9 +258,8 @@
                         <td>
                             <SelectedCoursePrefix:SelectedCourseControl id="Thu5" runat="server"/>
                             </td>
-                        <td>
-                            <SelectedCoursePrefix:SelectedCourseControl id="Thu6" runat="server"/>
-                            </td>
+                        <td class="auto-style10">
+                            Reserved for lunch break</td>
                         <td>
                             <SelectedCoursePrefix:SelectedCourseControl id="Thu7" runat="server"/>
                             </td>

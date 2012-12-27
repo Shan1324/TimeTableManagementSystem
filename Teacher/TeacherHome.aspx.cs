@@ -101,32 +101,38 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
         //myDS.Dispose();
         //myCon.ConClose();
         String queryString;
-        queryString = "Select ComCod, CourseNo, CourseTitle from tblcourses where ";
+        queryString = "Select ComCod, CourseNo, CourseTitle from tblcourses ";
         DBCon myCon = new DBCon();
         myCon.ConOpen();
-        if (ddlDepartments.SelectedItem.Text != "All Departments")
+        if (ddlDepartments.SelectedItem.Text != "All Departments" || ddlSem.SelectedItem.Text != "All Semesters" || txtSearchString.Text != "")
         {
-            queryString = queryString + " ComCod in (Select ComCod from tblDepartment where Department = '" + ddlDepartments.SelectedItem.Text + "'";
-            if (ddlSem.SelectedItem.Text != "All Semesters")
+            queryString += "where ";
+            if (ddlDepartments.SelectedItem.Text != "All Departments")
             {
-                queryString += " and Semester = '" + ddlSem.SelectedItem.Text + "'";
+                queryString = queryString + " ComCod in (Select ComCod from tblDepartment where Department = '" + ddlDepartments.SelectedItem.Text + "'";
+                if (ddlSem.SelectedItem.Text != "All Semesters")
+                {
+                    queryString += " and Semester = '" + ddlSem.SelectedItem.Text + "'";
+                }
+                queryString += ") ";
             }
-            queryString += ") and ";
-        }
-        else
-        {
-            if (ddlSem.SelectedItem.Text != "All Semesters")
+            else
             {
-                queryString = queryString + " ComCod in (Select ComCod from tblDepartment where Semester = '" + ddlSem.SelectedItem.Text + "') and ";
+                if (ddlSem.SelectedItem.Text != "All Semesters")
+                {
+                    queryString = queryString + " ComCod in (Select ComCod from tblDepartment where Semester = '" + ddlSem.SelectedItem.Text + "') ";
+                }
             }
-        }
-
-        if (txtSearchString.Text != "")
-        {
-            queryString +=  ddlSearchItem.SelectedItem.Value + " like '%" + txtSearchString.Text + "%' and ";
-        }
-
-        queryString += " ComCod not in ( select ComCod from tblcourseteachermap where TeacherID = '" + Current_User_ID + "')";
+            if (txtSearchString.Text != "")
+            {
+                if (ddlDepartments.SelectedItem.Text != "All Departments" || ddlSem.SelectedItem.Text != "All Semesters")
+                {
+                    queryString += " and ";
+                }
+                queryString +=  ddlSearchItem.SelectedItem.Value + " like '%" + txtSearchString.Text + "%'";
+            }
+        }   
+        
 
         queryCommand = myCon.MakeSqlCommand(queryString);
         sqlDA = new SqlDataAdapter(queryCommand);
@@ -142,7 +148,7 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
     private void Bind_grdAddedCourses()
     {
         //populate courses added to profile
-        queryString = "Select A.ComCod as ComCod, A.CourseNo as CourseNo, A.CourseTitle as CourseTitle, B.Section as Section from tblcourses as A,tblcourseteachermap as B where A.ComCod in ( select ComCod from tblcourseteachermap where TeacherID = '" + Current_User_ID + "') and A.ComCod = B.ComCod";
+        queryString = "Select distinct A.ComCod as ComCod, A.CourseNo as CourseNo, A.CourseTitle as CourseTitle, B.DaySession as DaySession from tblcourses as A,tblcourseteachermap as B where A.ComCod in ( select ComCod from tblcourseteachermap where TeacherID = '" + Current_User_ID + "') and A.ComCod = B.ComCod";
         queryCommand = myCon.MakeSqlCommand(queryString);
         sqlDA = new SqlDataAdapter(queryCommand);
         System.Data.DataSet myDS = new System.Data.DataSet();
@@ -178,12 +184,14 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
         {
             GridViewRow grdSelectedRow = grdCourses.Rows[i];
             String selectedComCod = grdSelectedRow.Cells[1].Text;
-            DropDownList selectedSectionList = (DropDownList)grdSelectedRow.FindControl("ddlSection");
-            String selectedSection = selectedSectionList.SelectedItem.Value.ToString();
+            DropDownList selectedSessionList = (DropDownList)grdSelectedRow.FindControl("ddlSession");
+            DropDownList selectedDayList = (DropDownList)grdSelectedRow.FindControl("ddlDay");
+            String selectedSession = selectedSessionList.SelectedItem.Value.ToString();
+            String selectedDay = selectedDayList.SelectedItem.Value.ToString();
             CheckBox chkSelectedCourse = (CheckBox)grdSelectedRow.FindControl("chkItemSelect");
             if (chkSelectedCourse.Checked)
             {
-                string insertQuery = "Insert into tblcourseteachermap(TeacherID,ComCod,Section) values ('" + Current_User_ID + "','" + selectedComCod + "','" + selectedSection + "')";
+                string insertQuery = "Insert into tblcourseteachermap(TeacherID,ComCod,DaySession) values ('" + Current_User_ID + "','" + selectedComCod + "','" + selectedDay + selectedSession + "')";
                 if (myCon.ExecuteNonQuery(insertQuery) <= 0)
                 {
                     Response.Write("<script LANGUAGE='JavaScript' >alert('DB Updation failed, changes might be lost');</script>");
@@ -223,7 +231,7 @@ public partial class Teacher_TeacherHome : System.Web.UI.Page
             CheckBox chkSelectedCourse = (CheckBox)grdSelectedRow.FindControl("chkItemSelectRemove");
             if (chkSelectedCourse.Checked)
             {
-                string insertQuery = "delete from tblcourseteachermap where TeacherID ='" + Current_User_ID + "' and ComCod = '" + selectedComCod + "' and Section = '" + selectedSection + "'";
+                string insertQuery = "delete from tblcourseteachermap where TeacherID ='" + Current_User_ID + "' and ComCod = '" + selectedComCod + "' and DaySession = '" + selectedSection + "'";
                 if (myCon.ExecuteNonQuery(insertQuery) <= 0)
                 {
                     Response.Write("<script LANGUAGE='JavaScript' >alert('DB Updation failed, changes might be lost');</script>");

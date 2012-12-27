@@ -78,13 +78,28 @@
                         <asp:BoundField DataField="ComCod" HeaderText="COM COD" />
                         <asp:BoundField DataField="CourseNo" HeaderText="COURSE NO" />
                         <asp:BoundField DataField="CourseTitle" HeaderText="COURSE TITLE" />
-                        <asp:TemplateField HeaderText="SECTION">
+                        <asp:TemplateField HeaderText="Day">
                             <ItemTemplate>
-                                <asp:DropDownList ID="ddlSection" runat="server">
+                                <asp:DropDownList ID="ddlDay" runat="server">
+                                    <asp:ListItem Value="Sun">Sunday</asp:ListItem>
+                                    <asp:ListItem Value="Mon">Monday</asp:ListItem>
+                                    <asp:ListItem Value="Tue">Tuesday</asp:ListItem>
+                                    <asp:ListItem Value="Wed">Wednesday</asp:ListItem>
+                                    <asp:ListItem Value="Thu">Thursday</asp:ListItem>
+                                </asp:DropDownList>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Session">
+                            <ItemTemplate>
+                                <asp:DropDownList ID="ddlSession" runat="server">
                                     <asp:ListItem>1</asp:ListItem>
                                     <asp:ListItem>2</asp:ListItem>
                                     <asp:ListItem>3</asp:ListItem>
                                     <asp:ListItem>4</asp:ListItem>
+                                    <asp:ListItem>5</asp:ListItem>
+                                    <asp:ListItem>7</asp:ListItem>
+                                    <asp:ListItem>8</asp:ListItem>
+                                    <asp:ListItem>9</asp:ListItem>
                                 </asp:DropDownList>
                             </ItemTemplate>
                         </asp:TemplateField>
@@ -183,7 +198,7 @@
                         <asp:BoundField DataField="ComCod" HeaderText="COM COD" />
                         <asp:BoundField DataField="CourseNo" HeaderText="COURSE NO" />
                         <asp:BoundField DataField="CourseTitle" HeaderText="COURSE TITLE" />
-                        <asp:BoundField DataField="Section" HeaderText="SECTION" />
+                        <asp:BoundField DataField="DaySession" HeaderText="DaySession" />
                     </Columns>
                     <FooterStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
                     <HeaderStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
