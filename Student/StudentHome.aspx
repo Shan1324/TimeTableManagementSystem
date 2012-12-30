@@ -46,6 +46,8 @@
             height: 23px;
             width: 507px;
         }
+        .auto-style22 {
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
@@ -280,12 +282,12 @@
                 <table class="auto-style18">
                     <tr>
                         <td>
-                            <table class="auto-style1" style="width: 19%">
+                            <table class="auto-style1" style="width: 22%">
                                 <tr>
-                                    <td colspan="2">&nbsp;</td>
+                                    <td>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">
+                                    <td>
                                         <table class="auto-style1">
                                             <tr>
                                                 <td class="auto-style12">Approval Status</td>
@@ -302,9 +304,10 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="auto-style14">&nbsp;</td>
-                                    <td>
+                                    <td class="auto-style22">
                                         <asp:Button ID="btnSendForApproval" runat="server" OnClick="btnSendForApproval_Click" Text="Send for approval" Width="118px" />
+                                    &nbsp;
+                                        <asp:Button ID="btnPrint" runat="server" OnClick="btnPrint_Click" Text="Print Timetable" Visible="False" />
                                     </td>
                                 </tr>
                             </table>

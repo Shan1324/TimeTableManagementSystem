@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,6 +7,9 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Data.Sql;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.html;
 
 public partial class Student_StdentHome : System.Web.UI.Page
 {
@@ -175,6 +179,14 @@ public partial class Student_StdentHome : System.Web.UI.Page
             lblApprovalStatus.Text = "No requests made";
         }
         myCon.ConClose();
+        if (lblApprovalStatus.Text == "Approved")
+        {
+            btnPrint.Visible = true;
+        }
+        else
+        {
+            btnPrint.Visible = false;
+        }
     }
     private void Make_Dirty_Approval_Status()
     {
@@ -209,5 +221,140 @@ public partial class Student_StdentHome : System.Web.UI.Page
     {
         Session["UserId"] = null;
         Response.Redirect("~/UserLogin.aspx");
+    }
+    protected void btnPrint_Click(object sender, EventArgs e)
+    {
+       Prepare_Print();
+    }
+    protected void Prepare_Print()
+    {
+        String[] weekDays = new String[] { " ","Sun", "Mon", "Tue", "Wed", "Thu" };
+        int[] sessions = new int[] {0,1,2,3,4,5,6,7,8,9};
+        PdfPTable tblSchedule = new PdfPTable(10);  
+        PdfPRow[] tempRow = new PdfPRow[6];
+        PdfPCell[][] tempCell = new PdfPCell[6][];
+        int rowIndex = 0;
+        int cellIndex = 0;
+        Paragraph subject = new Paragraph();
+        Paragraph teacher = new Paragraph();
+        Paragraph lunch = new Paragraph();
+        Paragraph dayPara = new Paragraph();
+        Paragraph sessionPara = new Paragraph();
+        Paragraph teacherPara = new Paragraph();
+
+        Font lunch_font = new Font();
+        Font day_session_para = new Font();
+        Font session_font = new Font();
+        Font teacher_font = new Font();
+
+        session_font.Size = 10;
+        teacher_font.SetStyle("Italics");
+        teacher_font.Size = 7;
+
+        lunch_font.SetColor(153, 153, 255);
+        lunch_font.SetStyle("italics");
+        lunch = new Paragraph("Lunch", lunch_font);
+
+        day_session_para.SetColor(0, 0, 153);
+
+        foreach (String weekDay in weekDays)
+        {
+            tempCell[rowIndex] = new PdfPCell[10];
+            tempRow[rowIndex] = new PdfPRow(tempCell[rowIndex]);
+            foreach (int session in sessions)
+            {
+                if (session == 0 || session == 6)
+                {
+                    if (session == 0)
+                    {
+                        dayPara = new Paragraph(weekDays[rowIndex],day_session_para);
+                        tempCell[rowIndex][cellIndex] = new PdfPCell(dayPara);                        
+                    }
+                    else
+                        if (weekDay != " ")
+                        {
+                            tempCell[rowIndex][cellIndex] = new PdfPCell(lunch);                            
+                        }
+                        else
+                        {
+                            //tempCell[rowIndex][cellIndex] = new PdfPCell(new Phrase(Convert.ToString(sessions[cellIndex])));
+                            dayPara = new Paragraph(Convert.ToString(sessions[cellIndex]), day_session_para);
+                            tempCell[rowIndex][cellIndex] = new PdfPCell(dayPara);
+                        }
+                }
+                else
+                {
+                    if (weekDay == " ")
+                    {
+                        dayPara = new Paragraph(Convert.ToString(sessions[cellIndex]), day_session_para);
+                        tempCell[rowIndex][cellIndex] = new PdfPCell(dayPara);
+                        //tempCell[rowIndex][cellIndex] = new PdfPCell(new Phrase(Convert.ToString(sessions[cellIndex])));
+                    }
+                    else
+                    {
+                        string query = "select B.CourseTitle,A.TeacherID from tblStudentCourseMap as A,tblCourses as B where A.ComCod = B.ComCod and A.DaySession = '" + weekDay + session + "' and A.StudentID = '" + Current_User_ID + "'";
+                        myCon.ConOpen();
+                        SqlDataReader sessionDet = myCon.ExecuteReader(query);
+
+                        if (sessionDet.Read())
+                            if (!sessionDet.IsDBNull(0))
+                            {
+                                sessionPara = new Paragraph(sessionDet.GetString(0), session_font);
+                                //tempCell[rowIndex][cellIndex] = new PdfPCell(sessionPara);
+                                teacherPara = new Paragraph(sessionDet.GetString(1), teacher_font);
+                                tempCell[rowIndex][cellIndex] = new PdfPCell(new Phrase(sessionPara));
+                                tempCell[rowIndex][cellIndex].Phrase.Add(new Phrase("\n"));
+                                tempCell[rowIndex][cellIndex].Phrase.Add(teacherPara);
+                                //tempCell[rowIndex][cellIndex] = new PdfPCell(new Phrase(sessionDet.GetString(0) + "\n" + sessionDet.GetString(1)));
+                            }
+                            else
+                            {
+                                tempCell[rowIndex][cellIndex] = new PdfPCell(new Phrase(""));
+                                //tempCell[rowIndex][cellIndex
+                            }
+                        else
+                            tempCell[rowIndex][cellIndex] = new PdfPCell(new Phrase(""));
+                        myCon.ConClose();
+                        tempCell[rowIndex][cellIndex].FixedHeight = 75;
+                    }
+                    
+                }
+                
+                //tempCell[rowIndex][cellIndex].Width = 50;
+                cellIndex++;
+                //tempRow[rowIndex].Cells.Add(tempCell[cellIndex++, rowIndex]);
+            }
+            cellIndex = 0;
+            //rowIndex++;
+            tblSchedule.Rows.Add(tempRow[rowIndex++]);
+        }
+
+        Font HeaderFont = new Font();
+        Font HeadingFont = new Font();
+        HeaderFont.Size = 20;
+        HeaderFont.SetStyle(Font.UNDERLINE);
+        HeadingFont.Size = 15;
+        HeadingFont.SetStyle(Font.UNDERLINE);
+        Paragraph HeaderPara = new Paragraph("BITS PILANI, DUBAI OFFCAMPUS - TIMETABLE", HeaderFont);
+        Paragraph HeadingPara = new Paragraph("Time Table allotment for " + Current_User_ID + ".",HeadingFont);
+        HeaderPara.Alignment = HeadingPara.Alignment = 1;
+
+        Document rptTimetable = new Document(PageSize.A4_LANDSCAPE.Rotate());
+        PdfWriter.GetInstance(rptTimetable, new FileStream(Request.PhysicalApplicationPath + "\\" + Current_User_ID + "_timetable.pdf", FileMode.Create));
+        rptTimetable.Open();
+        rptTimetable.AddCreationDate();
+        rptTimetable.AddHeader("BITS PILANI, DUBAI OFFCAMPUS", "TIMETABLE");
+        rptTimetable.Add(new Paragraph("\n"));
+        rptTimetable.AddTitle("BITS PILANI, DUBAI OFFCAMPUS - TIMETABLE");
+        rptTimetable.Add(HeaderPara);
+        rptTimetable.Add(HeadingPara);
+        rptTimetable.Add(new Paragraph("\n\n"));
+
+        if (rptTimetable != null && tblSchedule != null)
+        {
+            rptTimetable.Add(tblSchedule);
+        }
+        rptTimetable.Close();
+        Response.Redirect("~\\" + Current_User_ID + "_timetable.pdf");
     }
 }
